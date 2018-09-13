@@ -1,31 +1,19 @@
-# To run parallel jobs in SLURM, we need the
-# ClusterManagers package, which
-# can be installed with the command
-# `Pkg.add("ClusterManagers")`
+# detect if using SLURM
+const IN_SLURM = "SLURM_JOBID" in keys(ENV)
 
-# Recall we asked for 5 processes in the `.slurm` file.
-# This managing process is one of those processes, so
-# now we can spin off 4 more.
-# These are created using either `addprocs_slurm(4)` or
-# `addprocs(SlurmManager(4))`.
-
-# This will create worker instances that work the same way
-# (from your perspective) as
-# the workers that would be created if you'd launched julia
-# on your own computer with `julia -p 4` or as if you'd
-# openned Julia and run
-# `addprocs(4)`
-
-typeof(ARGS) <: Vector{String} || throw(error("args must be string"))
-length(ARGS) == 1 || throw(error("pass 1 arg only"))
-
+# load packages
 using Distributed
-using ClusterManagers
+IN_SLURM && using ClusterManagers
 
 # Here we create our parallel julia processes
-pids = addprocs_slurm(parse(Int, ARGS[1]))
+if IN_SLURM
+    pids = addprocs_slurm(parse(Int, ENV["SLURM_NTASKS"]))
+    print("\n")
+else
+    pids = addprocs()
+end
 
-# See ids of our workers. Should be length 4.
+# See ids of our workers. Should be same length as SLURM_NTASKS
 # The output of this `println` command will appear in the
 # SLURM output file julia_in_parallel.output
 println(workers())
