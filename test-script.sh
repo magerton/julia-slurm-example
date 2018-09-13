@@ -7,8 +7,8 @@
 #-----------------------
 
 #SBATCH --job-name=out
-#SBATCH -o out-%j.output
-#SBATCH -e out-%j.output
+#SBATCH --output out-%j.output
+#SBATCH --error out-%j.output
 #SBATCH --mail-user=mjagerton@ucdavis.edu
 #SBATCH --mail-type=ALL
 
