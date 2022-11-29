@@ -1,3 +1,9 @@
+# DEPRECATED!!!!
+
+See newer (better) version at <https://github.com/magerton/FARMTest.jl> which uses [SlurmClusterManager.jl](https://github.com/kleinhenz/SlurmClusterManager.jl)
+
+# Old README.md
+
 Simple example scripts for running Julia on a SLURM 
 
 These scripts are based on examples in the
